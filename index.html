@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNI - Gestión de Recursos por Fecha</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #00447c;
+            --secondary-color: #e6a400;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #002a5c);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-type {
+            background-color: var(--secondary-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        
+        .view-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .view-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background-color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .view-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .view-btn:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+        
+        .view-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .view-content.active {
+            display: block;
+        }
+        
+        .dates-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .dates-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .date-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .date-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .date-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .date-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .date-badge {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .date-body {
+            padding: 20px;
+        }
+        
+        .date-description {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .drive-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #1a73e8;
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .drive-link:hover {
+            background-color: #0d62d9;
+        }
+        
+        .future-dates {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        .future-dates-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+        
+        .future-date-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .future-date {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .future-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .future-link:hover {
+            text-decoration: underline;
+        }
+        
+        .access-info {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 3rem;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .access-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .access-simulated {
+            background-color: #e7f3ff;
+            border-left: 4px solid #1a73e8;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .dates-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .future-dates-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .access-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div>
+                    <h1>Universidad Nacional de Ingeniería</h1>
+                    <p class="subtitle">Plataforma de Gestión de Recursos Académicos</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-type" id="user-type-label">Docente</div>
+                <div id="current-date"></div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="main-container">
+        <div class="view-selector">
+            <button class="view-btn active" id="teacher-view-btn">
+                <i class="fas fa-chalkboard-teacher"></i> Vista para Docente
+            </button>
+            <button class="view-btn" id="admin-view-btn">
+                <i class="fas fa-user-tie"></i> Vista para Administrativo
+            </button>
+        </div>
+        
+        <div class="view-content active" id="teacher-view">
+            <div class="dates-section">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-alt"></i> Fechas Principales
+                </h2>
+                <div class="dates-container">
+                    <!-- Fecha 1 -->
+                    <div class="date-card">
+                        <div class="date-header">
+                            <div class="date-title">LUNES 16 FEBRERO</div>
+                            <div class="date-badge">Principal</div>
+                        </div>
+                        <div class="date-body">
+                            <p class="date-description">
+                                Material de apoyo para la semana de introducción a la ingeniería. Contiene presentaciones, guías de laboratorio y recursos bibliográficos.
+                            </p>
+                            <a href="https://drive.google.com/drive/folders/1umvuBmj1VHpjMchi0gWNNbhvk6f1wJYr?usp=drive_link" target="_blank" class="drive-link">
+                                <i class="fab fa-google-drive"></i> Acceder al Drive
+                            </a>
+                            <div class="access-simulated">
+                                <i class="fas fa-info-circle"></i> Enlace simulado: drive.google.com/drive/folders/1abc123def456ghi789jkl
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fecha 2 -->
+                    <div class="date-card">
+                        <div class="date-header">
+                            <div class="date-title">MIÉRCOLES 18 FEBRERO</div>
+                            <div class="date-badge">Principal</div>
+                        </div>
+                        <div class="date-body">
+                            <p class="date-description">
+                                Recursos para talleres de metodología de la investigación. Incluye formatos de proyectos, ejemplos de papers y rúbricas de evaluación.
+                            </p>
+                            <a href="https://drive.google.com/drive/folders/1bxDtL_PwcTtaQ6M-tYb3hNLEsBTO8SJR?usp=drive_link" target="_blank" class="drive-link">
+                                <i class="fab fa-google-drive"></i> Acceder al Drive
+                            </a>
+                            <div class="access-simulated">
+                                <i class="fas fa-info-circle"></i> Enlace simulado: drive.google.com/drive/folders/2mno345pqr678stu901vwx
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fecha 3 -->
+                    <div class="date-card">
+                        <div class="date-header">
+                            <div class="date-title">VIERNES 20 FEBRERO</div>
+                            <div class="date-badge">Principal</div>
+                        </div>
+                        <div class="date-body">
+                            <p class="date-description">
+                                Material para la evaluación semanal y planificación de la siguiente unidad. Contiene exámenes tipo, solucionarios y cronogramas.
+                            </p>
+                            <a href="https://drive.google.com/drive/folders/1Yr4Tz42EFbmwL6h05yQn7hzzyB7qwm5P?usp=drive_link" target="_blank" class="drive-link">
+                                <i class="fab fa-google-drive"></i> Acceder al Drive
+                            </a>
+                            <div class="access-simulated">
+                                <i class="fas fa-info-circle"></i> Enlace simulado: drive.google.com/drive/folders/3yzab234cde567fgh890ijk
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+           
+            <div class="access-info">
+                <div class="access-icon">
+                    <i class="fas fa-lock-open"></i>
+                </div>
+                <div>
+                    <h3>Acceso Docente</h3>
+                    <p>Como docente, tienes acceso completo a todos los materiales, incluyendo recursos pedagógicos, evaluaciones y planificaciones. Puedes subir nuevos materiales a las carpetas correspondientes.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="view-content" id="admin-view">
+            <div class="dates-section">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-alt"></i> Fechas Principales (Vista Administrativa)
+                </h2>
+                <div class="dates-container">
+                    <!-- Fecha 1 -->
+                    <div class="date-card">
+                        <div class="date-header">
+                            <div class="date-title">LUNES 16 FEBRERO</div>
+                            <div class="date-badge">Personal DIRAGE</div>
+                        </div>
+                        <div class="date-body">
+                            <p class="date-description">
+                                Documentos administrativos: planillas de asistencia, informes de gestión, formatos institucionales y memorandos de la semana.
+                            </p>
+                            <a href="https://drive.google.com/drive/folders/1DD5hJwAtb5o_tWu2ed8Rsb19-B6a7LVn" target="_blank" class="drive-link">
+                                <i class="fab fa-google-drive"></i> Acceder al Drive
+                            </a>
+                            <div class="access-simulated">
+                                <i class="fas fa-info-circle"></i> Enlace simulado: drive.google.com/drive/folders/4lmn567opq890rst123uvw
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fecha 2 -->
+                    <div class="date-card">
+                        <div class="date-header">
+                            <div class="date-title">MIÉRCOLES 18 FEBRERO</div>
+                            <div class="date-badge">Personal DIRAGE</div>
+                        </div>
+                        <div class="date-body">
+                            <p class="date-description">
+                                Recursos de gestión universitaria: informes financieros, actas de reuniones, documentación de personal y procedimientos administrativos.
+                            </p>
+                            <a href="https://drive.google.com/drive/folders/149P-0hsYsiV-XQ7wKziBhXu8zIUPoQCg?usp=sharing_eil_se_dm&ts=6989e023" target="_blank" class="drive-link">
+                                <i class="fab fa-google-drive"></i> Acceder al Drive
+                            </a>
+                            <div class="access-simulated">
+                                <i class="fas fa-info-circle"></i> Enlace simulado: drive.google.com/drive/folders/5xyz6789ab012cde345fgh
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fecha 3 -->
+                    <div class="date-card">
+                        <div class="date-header">
+                            <div class="date-title">VIERNES 20 FEBRERO</div>
+                            <div class="date-badge">Personal DIRAGE</div>
+                        </div>
+                        <div class="date-body">
+                            <p class="date-description">
+                                Archivos de cierre de semana: nóminas, estadísticas de asistencia, reportes de incidentes y planificación para la próxima semana.
+                            </p>
+                            <a href="https://drive.google.com/drive/folders/13dF3QqfyhcQO207VPjKqaiq4bdYIaTmk" target="_blank" class="drive-link">
+                                <i class="fab fa-google-drive"></i> Acceder al Drive
+                            </a>
+                            <div class="access-simulated">
+                                <i class="fas fa-info-circle"></i> Enlace simulado: drive.google.com/drive/folders/6ijk789lmn012opq345rst
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="access-info">
+                <div class="access-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div>
+                    <h3>Acceso Administrativo</h3>
+                    <p>Como personal administrativo, tienes acceso a documentos de gestión, informes, nóminas y recursos institucionales. Puedes gestionar permisos y organizar la documentación oficial.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Universidad Nacional de Ingeniería &copy; 2026 - Saco Oliveros</p>
+        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Los enlaces a Google Drive son simulados para fines de demostración</p>
+    </footer>
+    
+    <script>
+        // Configurar fecha actual
+        const currentDateElement = document.getElementById('current-date');
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateElement.textContent = now.toLocaleDateString('es-ES', options);
+        
+        // Funcionalidad para cambiar entre vistas
+        const teacherViewBtn = document.getElementById('teacher-view-btn');
+        const adminViewBtn = document.getElementById('admin-view-btn');
+        const teacherView = document.getElementById('teacher-view');
+        const adminView = document.getElementById('admin-view');
+        const userTypeLabel = document.getElementById('user-type-label');
+        
+        teacherViewBtn.addEventListener('click', () => {
+            teacherViewBtn.classList.add('active');
+            adminViewBtn.classList.remove('active');
+            teacherView.classList.add('active');
+            adminView.classList.remove('active');
+            userTypeLabel.textContent = 'Docente';
+            userTypeLabel.style.backgroundColor = '#e6a400';
+        });
+        
+        adminViewBtn.addEventListener('click', () => {
+            adminViewBtn.classList.add('active');
+            teacherViewBtn.classList.remove('active');
+            adminView.classList.add('active');
+            teacherView.classList.remove('active');
+            userTypeLabel.textContent = 'Administrativo';
+            userTypeLabel.style.backgroundColor = '#28a745';
+        });
+        
+        // Simular clic en enlaces futuros (para demostración)
+        const futureLinks = document.querySelectorAll('.future-link');
+        futureLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Este es un enlace simulado para una fecha futura. En una implementación real, este enlace llevaría a una carpeta de Google Drive correspondiente a esa fecha.');
+            });
+        });
+        
+        // Efecto hover mejorado para tarjetas de fecha
+        const dateCards = document.querySelectorAll('.date-card');
+        dateCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const header = card.querySelector('.date-header');
+                header.style.transition = 'background-color 0.3s ease';
+                header.style.backgroundColor = '#002a5c';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const header = card.querySelector('.date-header');
+                header.style.backgroundColor = '';
+            });
+        });
+    </script>
+</body>
+</html>

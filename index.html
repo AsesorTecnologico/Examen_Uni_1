@@ -312,6 +312,98 @@
                 text-align: center;
             }
         }
+
+        /* Banner para el Examen de Admisión */
+.exam-banner {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-left: 8px solid var(--secondary-color);
+    border-radius: var(--border-radius);
+    padding: 20px 25px;
+    margin: 25px 0 35px 0;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    box-shadow: var(--box-shadow);
+    animation: fadeIn 0.8s ease;
+}
+
+.exam-icon {
+    background-color: var(--primary-color);
+    color: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.exam-info h3 {
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.exam-info p {
+    margin-bottom: 12px;
+    color: #495057;
+    font-size: 1.1rem;
+}
+
+.exam-info p i {
+    color: var(--secondary-color);
+    margin-right: 8px;
+}
+
+.meet-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.meet-link:hover {
+    background-color: #0d62d9;
+}
+
+.meet-id {
+    background-color: #dee2e6;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-family: monospace;
+    font-size: 0.95rem;
+    color: #212529;
+}
+
+@media (max-width: 768px) {
+    .exam-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .exam-icon {
+        margin-bottom: 10px;
+    }
+    
+    .meet-link {
+        display: block;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    
+    .meet-id {
+        display: inline-block;
+    }
+}
     </style>
 </head>
 <body>
@@ -460,6 +552,20 @@
                 </div>
             </div>
         </div>
+            <!-- Bloque destacado: Examen de Admisión UNI -->
+<div class="exam-banner">
+    <div class="exam-icon">
+        <i class="fas fa-graduation-cap"></i>
+    </div>
+    <div class="exam-info">
+        <h3>📝 EXAMEN ADMISIÓN UNI</h3>
+        <p><i class="fas fa-calendar-alt"></i> Lunes, Miércoles y Viernes, 16 de febrero · 12:30 – 7:00pm</p>
+        <a href="https://meet.google.com/zdr-mvyi-imh" target="_blank" class="meet-link">
+            <i class="fab fa-google"></i> Unirse a Google Meet
+        </a>
+        <span class="meet-id">ID: zdr-mvyi-imh</span>
+    </div>
+</div>
     </div>
     
     <footer>
@@ -523,5 +629,6 @@
             });
         });
     </script>
+
 </body>
 </html>
